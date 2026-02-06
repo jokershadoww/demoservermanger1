@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 function LoginInner() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
   const searchParams = useSearchParams();
-  const activated = searchParams.get('activated') === '1';
+  const activated = false;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black p-4">
@@ -22,11 +22,7 @@ function LoginInner() {
           <p className="text-zinc-400">لوحة تحكم انتقام السلاطين</p>
         </div>
 
-        {activated && (
-          <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm text-center">
-            تم التفعيل بنجاح. يمكنك الآن تسجيل الدخول.
-          </div>
-        )}
+        
 
         <form action={formAction} className="space-y-4">
           {state?.error && (
@@ -78,19 +74,12 @@ function LoginInner() {
             )}
           </button>
 
-          <div className="mt-3 text-center">
-            <a
-              href="/activation"
-              className="text-sm text-primary hover:underline"
-            >
-              تفعيل
-            </a>
-          </div>
+          
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-xs text-zinc-600">
-            © 2024 جميع الحقوق محفوظة - انتقام السلاطين
+            © 2024 جميع الحقوق محفوظة - omar46
           </p>
         </div>
       </div>

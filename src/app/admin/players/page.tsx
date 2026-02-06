@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useActionState, startTransition } from 'react';
-import { UserPlus, Search, Mail, Lock, User, Loader2, AlertCircle, Eye, Trash2, UserMinus, KeyRound, Copy, ShieldAlert } from 'lucide-react';
+import { UserPlus, Search, Mail, Lock, User, Loader2, AlertCircle, Eye, Trash2, UserMinus, KeyRound, Copy } from 'lucide-react';
 import { createMember, getMembers, updateMember, disableMemberAction, enableMemberAction, deleteMemberAction, resetPasswordAction } from '@/app/actions/members';
 
 type ListedUser = {
@@ -53,7 +53,6 @@ export default function PlayersPage() {
 
   return (
     <div className="space-y-6">
-      <ActivationOverlay />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-2">اللاعبين</h1>
@@ -287,39 +286,6 @@ export default function PlayersPage() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-function ActivationOverlay() {
-  const [active, setActive] = useState<boolean | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch('/api/activation-status', { cache: 'no-store' });
-        const json = await res.json();
-        if (!cancelled) setActive(!!json.active);
-      } catch {
-        if (!cancelled) setActive(false);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, []);
-  if (active === null) return null;
-  if (active) return null;
-  return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div className="relative z-50 max-w-md w-full p-6 rounded-2xl bg-background border border-border text-center space-y-3">
-        <ShieldAlert className="w-8 h-8 mx-auto text-amber-400" />
-        <h2 className="text-xl font-bold">الرجاء تفعيل الموقع أولاً</h2>
-        <p className="text-muted-foreground">لا يمكن إدارة حسابات اللاعبين والمنسقين قبل إتمام التفعيل</p>
-        <div className="pt-2">
-          <a href="/admin/activation" className="inline-block px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
-            الذهاب لصفحة التفعيل
-          </a>
-        </div>
-      </div>
     </div>
   );
 }

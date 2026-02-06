@@ -1,6 +1,7 @@
 'use server';
 
 import { adminAuth } from '@/lib/firebase';
+import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import type { UserRecord } from 'firebase-admin/auth';
 
@@ -48,7 +49,23 @@ export async function createMember(prevState: any, formData: FormData) {
       displayName,
     });
 
-    await adminAuth.setCustomUserClaims(userRecord.uid, { role });
+    let ownerAdminUid: string | undefined = undefined;
+    let ownerAdminEmail: string | undefined = undefined;
+    try {
+      const cookieStore = await cookies();
+      const actorRole = cookieStore.get('user_role')?.value;
+      const actorEmail = cookieStore.get('user_email')?.value;
+      if (actorRole === 'admin' && actorEmail) {
+        const adminRecord = await adminAuth.getUserByEmail(actorEmail);
+        ownerAdminUid = adminRecord.uid;
+        ownerAdminEmail = actorEmail.toLowerCase();
+      }
+    } catch {}
+
+    const claims: Record<string, any> = { role };
+    if (ownerAdminUid) claims.ownerAdminUid = ownerAdminUid;
+    if (ownerAdminEmail) claims.ownerAdminEmail = ownerAdminEmail;
+    await adminAuth.setCustomUserClaims(userRecord.uid, claims);
 
     revalidatePath('/admin/members');
     return { success: true };

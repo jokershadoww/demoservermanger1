@@ -1,8 +1,23 @@
+export const dynamic = 'force-dynamic';
 import { getCastles } from '@/app/actions/castles';
 import { getMembers } from '@/app/actions/members';
 import { Shield, Castle, Users, UserCog } from 'lucide-react';
 
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { adminAuth } from '@/lib/firebase';
+
 export default async function AdminHomePage() {
+  const cookieStore = await cookies();
+  const role = cookieStore.get('user_role')?.value;
+  const email = cookieStore.get('user_email')?.value;
+  if (role !== 'admin' || !email) {
+    redirect('/login');
+  }
+  const record = await adminAuth.getUserByEmail(email);
+  if (record.disabled) {
+    redirect('/login');
+  }
   const castlesRes = await getCastles(1, 10);
   const totals = (castlesRes as any).totals || { barracksArmorSum: 0, archersArmorSum: 0, castlesCount: 0 };
   const membersRes = await getMembers();

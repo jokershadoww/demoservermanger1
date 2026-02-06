@@ -1,7 +1,11 @@
+'use client';
+
 import Link from "next/link";
 import { Shield, Users, BarChart3, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
@@ -13,12 +17,12 @@ export default function Home() {
             </div>
             <span className="font-bold text-lg">انتقام السلاطين</span>
           </div>
-          <Link 
-            href="/login" 
+          <button
+            onClick={() => router.push('/login')}
             className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors text-sm"
           >
             تسجيل الدخول
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -39,13 +43,13 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link 
-              href="/login" 
+            <button
+              onClick={() => router.push('/login')}
               className="w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-lg transition-all shadow-lg shadow-primary/25 flex items-center justify-center gap-2"
             >
               الدخول للوحة التحكم
               <ChevronRight className="w-5 h-5" />
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -71,7 +75,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-8 text-center text-muted-foreground text-sm">
-        <p>© 2024 جميع الحقوق محفوظة - انتقام السلاطين</p>
+        <p>© 2024 جميع الحقوق محفوظة - omar46</p>
       </footer>
     </div>
   );
